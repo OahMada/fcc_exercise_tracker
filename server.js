@@ -45,15 +45,11 @@ const User = mongoose.model('User', UserSchema);
 app.post('/api/exercise/new-user', function(req, res, next) {
   // validate username not taken
   User.findOne({username: req.body.username}, function(err, user){
-    if(err) {
-      next(err);
+    if(!user){
+      res.user = req.body.username;
+      next();
     } else {
-      if(!user){
-        res.user = req.body.username;
-        next();
-      } else {
-        res.json({error: 'Username already taken'});
-      }
+      res.json({error: 'Username already taken'});
     }
   });
 },function(req, res, next) {
